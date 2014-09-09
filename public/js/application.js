@@ -1,5 +1,5 @@
 (function() {
-  var BALL_R_MAX, BALL_R_MIN, BALL_V_MAX, Ball, BallContainer, HEIGHT, N_BALLS, TWOPI, WIDTH, balls, brightness, canvas, darken, dc, getRand, i, random, _i;
+  var BALL_R_MAX, BALL_R_MIN, BALL_V_MAX, Ball, BallSpace, HEIGHT, N_BALLS, TWOPI, WIDTH, balls, brightness, canvas, darken, dc, getRand, i, intervalFunc, random, _i;
 
   random = Math.random;
 
@@ -32,7 +32,7 @@
 
   BALL_R_MAX = 40;
 
-  BALL_V_MAX = 10;
+  BALL_V_MAX = 4;
 
   Ball = (function() {
     function Ball(owner) {
@@ -77,19 +77,20 @@
 
   })();
 
-  BallContainer = (function() {
-    function BallContainer() {
+  BallSpace = (function() {
+    function BallSpace() {
       this.balls = [];
       this;
     }
 
-    BallContainer.prototype.addBall = function(ball) {
+    BallSpace.prototype.addBall = function(ball) {
       this.balls.push(ball);
       return this;
     };
 
-    BallContainer.prototype.draw = function(dc) {
+    BallSpace.prototype.draw = function(dc) {
       var ball, _i, _len, _ref;
+      this.drawBackground(dc);
       _ref = this.balls;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         ball = _ref[_i];
@@ -98,7 +99,13 @@
       return this;
     };
 
-    BallContainer.prototype.isntOverlap = function(x, y, r) {
+    BallSpace.prototype.drawBackground = function(dc) {
+      dc.fillStyle = '#fafafa';
+      dc.fillRect(0, 0, WIDTH, HEIGHT);
+      return this;
+    };
+
+    BallSpace.prototype.isntOverlap = function(x, y, r) {
       var ball, dx, dy, rr, _i, _len, _ref;
       _ref = this.balls;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -113,7 +120,7 @@
       return true;
     };
 
-    BallContainer.prototype.getSpace = function(r) {
+    BallSpace.prototype.getSpace = function(r) {
       var i, x, y, _i;
       for (i = _i = 0; _i < 1000; i = ++_i) {
         x = getRand(r, WIDTH - r);
@@ -125,7 +132,32 @@
       throw "Cannot keep space";
     };
 
-    return BallContainer;
+    BallSpace.prototype.moveBalls = function() {
+      var ball, _i, _len, _ref;
+      _ref = this.balls;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        ball = _ref[_i];
+        ball.x += ball.vx;
+        if (ball.x < ball.r) {
+          ball.vx = -ball.vx;
+          ball.x = 2 * ball.r - ball.x;
+        } else if (ball.x >= WIDTH - ball.r) {
+          ball.x = 2 * (WIDTH - ball.r) - ball.x;
+          ball.vx = -ball.vx;
+        }
+        ball.y += ball.vy;
+        if (ball.y < ball.r) {
+          ball.vy = -ball.vy;
+          ball.y = 2 * ball.r - ball.y;
+        } else if (ball.y >= HEIGHT - ball.r) {
+          ball.y = 2 * (HEIGHT - ball.r) - ball.y;
+          ball.vy = -ball.vy;
+        }
+      }
+      return this;
+    };
+
+    return BallSpace;
 
   })();
 
@@ -133,16 +165,17 @@
 
   dc = canvas.getContext('2d');
 
-  dc.fillStyle = '#fafafa';
-
-  dc.fillRect(0, 0, WIDTH, HEIGHT);
-
-  balls = new BallContainer;
+  balls = new BallSpace;
 
   for (i = _i = 0; 0 <= N_BALLS ? _i < N_BALLS : _i > N_BALLS; i = 0 <= N_BALLS ? ++_i : --_i) {
     new Ball(balls);
   }
 
-  balls.draw(dc);
+  intervalFunc = function() {
+    balls.moveBalls();
+    return balls.draw(dc);
+  };
+
+  window.setInterval(intervalFunc, 30);
 
 }).call(this);

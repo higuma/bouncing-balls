@@ -23,7 +23,7 @@ HEIGHT = 480
 N_BALLS = 25
 BALL_R_MIN = 5
 BALL_R_MAX = 40
-BALL_V_MAX = 10
+BALL_V_MAX = 4
 
 class Ball
   constructor: (@owner) ->
@@ -57,7 +57,7 @@ class Ball
     dc.closePath()
     @
 
-class BallContainer
+class BallSpace
   constructor: ->
     @balls = []
     @
@@ -67,7 +67,13 @@ class BallContainer
     @
 
   draw: (dc) ->
+    @drawBackground dc
     ball.draw dc for ball in @balls
+    @
+
+  drawBackground: (dc) ->
+    dc.fillStyle = '#fafafa'
+    dc.fillRect 0, 0, WIDTH, HEIGHT
     @
 
   isntOverlap: (x, y, r) ->
@@ -85,16 +91,32 @@ class BallContainer
       return [x, y] if @isntOverlap x, y, r
     throw "Cannot keep space"
 
+  moveBalls: ->
+    for ball in @balls
+      ball.x += ball.vx
+      if ball.x < ball.r
+        ball.vx = -ball.vx
+        ball.x = 2 * ball.r - ball.x
+      else if ball.x >= WIDTH - ball.r
+        ball.x = 2 * (WIDTH - ball.r) - ball.x
+        ball.vx = -ball.vx
+      ball.y += ball.vy
+      if ball.y < ball.r
+        ball.vy = -ball.vy
+        ball.y = 2 * ball.r - ball.y
+      else if ball.y >= HEIGHT - ball.r
+        ball.y = 2 * (HEIGHT - ball.r) - ball.y
+        ball.vy = -ball.vy
+    @
+
 canvas = document.getElementById 'canvas'
 dc = canvas.getContext '2d'
 
-dc.fillStyle = '#fafafa'
-dc.fillRect 0, 0, WIDTH, HEIGHT
-
-balls = new BallContainer
+balls = new BallSpace
 new Ball balls for i in [0...N_BALLS]
 
-balls.draw(dc)
+intervalFunc = ->
+  balls.moveBalls()
+  balls.draw dc
 
-
-
+window.setInterval intervalFunc, 30
