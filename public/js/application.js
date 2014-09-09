@@ -1,5 +1,5 @@
 (function() {
-  var BALL_R_MAX, BALL_R_MIN, BALL_V_MAX, Ball, BallSpace, FRAMES_PER_SECOND, GRAVITY, HEIGHT, N_BALLS, TWOPI, WIDTH, atan2, balls, brightness, canvas, cos, darken, dc, getRand, i, intervalFunc, random, sin, sqrt, _i;
+  var BALL_R_MAX, BALL_R_MIN, BALL_V_MAX, Ball, BallSpace, FRAMES_PER_SECOND, FRICTION, GRAVITY, HEIGHT, N_BALLS, TWOPI, WIDTH, atan2, balls, brightness, canvas, cos, darken, dc, getRand, i, intervalFunc, random, sin, sqrt, _i;
 
   random = Math.random;
 
@@ -43,6 +43,8 @@
   BALL_V_MAX = 3;
 
   GRAVITY = 0.5;
+
+  FRICTION = 0.02;
 
   FRAMES_PER_SECOND = 30;
 
@@ -166,6 +168,8 @@
       _ref = this.balls;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         ball = _ref[_i];
+        ball.vx *= 1 - FRICTION;
+        ball.vy *= 1 - FRICTION;
         ball.vy += GRAVITY;
         ball.x += ball.vx;
         if (ball.x < ball.r) {

@@ -28,6 +28,7 @@ BALL_R_MAX = 50
 BALL_V_MAX = 3
 
 GRAVITY = 0.5
+FRICTION = 0.02
 
 FRAMES_PER_SECOND = 30
 
@@ -112,6 +113,8 @@ class BallSpace
 
   moveBalls: ->
     for ball in @balls
+      ball.vx *= 1 - FRICTION
+      ball.vy *= 1 - FRICTION
       ball.vy += GRAVITY
       ball.x += ball.vx
       if ball.x < ball.r
