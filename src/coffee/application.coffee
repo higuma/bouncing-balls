@@ -1,6 +1,8 @@
-# utility functions
-
 random = Math.random
+sqrt = Math.sqrt
+sin = Math.sin
+cos = Math.cos
+atan2 = Math.atan2
 TWOPI = Math.PI * 2
 
 getRand = (min, max) ->
@@ -20,10 +22,12 @@ darken = (col, amount) ->
 WIDTH = 640
 HEIGHT = 480
 
-N_BALLS = 25
-BALL_R_MIN = 5
-BALL_R_MAX = 40
-BALL_V_MAX = 4
+N_BALLS = 20
+BALL_R_MIN = 10
+BALL_R_MAX = 50
+BALL_V_MAX = 3
+
+FRAMES_PER_SECOND = 30
 
 class Ball
   constructor: (@owner) ->
@@ -31,19 +35,32 @@ class Ball
     [@x, @y] = @owner.getSpace @r
     @vx = getRand -BALL_V_MAX, BALL_V_MAX
     @vy = getRand -BALL_V_MAX, BALL_V_MAX
+    @m = @r / BALL_R_MAX
     @owner.addBall @
     @initRandomColor()
+    @
 
   initRandomColor: ->
     innerCol = 0
-    while brightness(innerCol) < 0.5
+    while brightness(innerCol) < 0.75
       innerCol = random() * 0xffffff >> 0
-    outerCol = darken innerCol, 0.4
+    outerCol = darken innerCol, 0.5
 
     innerRgb = innerCol.toString 16
     outerRgb = outerCol.toString 16
     @innerColor = '#000000'.slice(0, 7 - innerRgb.length) + innerRgb
     @outerColor = '#000000'.slice(0, 7 - outerRgb.length) + outerRgb
+    @
+
+  speed: -> sqrt @vx * @vx + @vy * @vy
+
+  rotate: (angle) ->
+    vx = @vx
+    vy = @vy
+    c = cos angle
+    s = sin angle
+    @vx = vx * c - vy * s
+    @vy = vx * s + vy * c
     @
 
   draw: (dc) ->
@@ -109,6 +126,40 @@ class BallSpace
         ball.vy = -ball.vy
     @
 
+  bounce: (b1, b2) ->
+    angle = atan2 b1.y - b2.y, b1.x - b2.x
+    v1 = b1.speed()
+    v2 = b2.speed()
+    diffA1 = atan2(b1.vy, b1.vx) - angle
+    diffA2 = atan2(b2.vy, b2.vx) - angle
+    vx1 = v1 * cos diffA1
+    vx2 = v2 * cos diffA2
+    b1.vy = v1 * sin diffA1
+    b2.vy = v2 * sin diffA2
+    totalM = b1.m + b2.m
+    diffM = b1.m - b2.m
+    b1.vx = ( diffM * vx1 + 2 * b2.m * vx2) / totalM
+    b2.vx = (-diffM * vx2 + 2 * b1.m * vx1) / totalM
+    b1.rotate angle
+    b2.rotate angle
+    @
+
+  bounceAll: ->
+    for i in [0 ... @balls.length]
+      b1 = @balls[i]
+      for j in [i + 1 ... @balls.length]
+        b2 = @balls[j]
+        dx = b2.x - b1.x
+        dy = b2.y - b1.y
+        rr = b1.r + b2.r
+        if (dd = dx * dx + dy * dy) < rr * rr
+          d = sqrt dd
+          a = (b1.r + b2.r - d) / d
+          b1.x -= dx * a
+          b1.y -= dy * a
+          @bounce b1, b2
+    @
+
 canvas = document.getElementById 'canvas'
 dc = canvas.getContext '2d'
 
@@ -117,6 +168,8 @@ new Ball balls for i in [0...N_BALLS]
 
 intervalFunc = ->
   balls.moveBalls()
+  balls.bounceAll()
   balls.draw dc
+  return
 
-window.setInterval intervalFunc, 30
+window.setInterval intervalFunc, 1000 / FRAMES_PER_SECOND
