@@ -1,5 +1,5 @@
 (function() {
-  var BALL_R_MAX, BALL_R_MIN, BALL_V_MAX, Ball, BallContainer, HEIGHT, N_BALLS, TWOPI, WIDTH, balls, canvas, dc, getRand, i, random, _i;
+  var BALL_R_MAX, BALL_R_MIN, BALL_V_MAX, Ball, BallContainer, HEIGHT, N_BALLS, TWOPI, WIDTH, balls, brightness, canvas, darken, dc, getRand, i, random, _i;
 
   random = Math.random;
 
@@ -9,15 +9,28 @@
     return random() * (max - min) + min;
   };
 
+  brightness = function(c) {
+    return ((c & 0xFF) + ((c >> 8) & 0xFF) + ((c >> 16) & 0xFF)) / 765;
+  };
+
+  darken = function(col, amount) {
+    var a, b, g, r;
+    a = 1 - amount;
+    r = (col & 0xFF) * a;
+    g = ((col >> 8) & 0xFF) * a;
+    b = ((col >> 16) & 0xFF) * a;
+    return (r << 0) + (g << 8) + (b << 16);
+  };
+
   WIDTH = 640;
 
   HEIGHT = 480;
 
-  N_BALLS = 20;
+  N_BALLS = 25;
 
   BALL_R_MIN = 5;
 
-  BALL_R_MAX = 50;
+  BALL_R_MAX = 40;
 
   BALL_V_MAX = 10;
 
@@ -30,12 +43,30 @@
       this.vx = getRand(-BALL_V_MAX, BALL_V_MAX);
       this.vy = getRand(-BALL_V_MAX, BALL_V_MAX);
       this.owner.addBall(this);
-      return;
+      this.initRandomColor();
     }
 
+    Ball.prototype.initRandomColor = function() {
+      var innerCol, innerRgb, outerCol, outerRgb;
+      innerCol = 0;
+      while (brightness(innerCol) < 0.5) {
+        innerCol = random() * 0xffffff >> 0;
+      }
+      outerCol = darken(innerCol, 0.4);
+      innerRgb = innerCol.toString(16);
+      outerRgb = outerCol.toString(16);
+      this.innerColor = '#000000'.slice(0, 7 - innerRgb.length) + innerRgb;
+      this.outerColor = '#000000'.slice(0, 7 - outerRgb.length) + outerRgb;
+      return this;
+    };
+
     Ball.prototype.draw = function(dc) {
+      var grad;
       dc.beginPath();
-      dc.fillStyle = '#aaa';
+      grad = dc.createRadialGradient(this.x, this.y, this.r, this.x - this.r / 4, this.y - this.r / 4, this.r / 8);
+      grad.addColorStop(0, this.outerColor);
+      grad.addColorStop(1, this.innerColor);
+      dc.fillStyle = grad;
       dc.arc(this.x, this.y, this.r, 0, TWOPI);
       dc.fill();
       dc.closePath();

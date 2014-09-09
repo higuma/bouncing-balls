@@ -4,3 +4,7 @@ html {
   color: #333333;
   background-color: white;
 }
+
+canvas {
+  border: 1px solid;
+}
