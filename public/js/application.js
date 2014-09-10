@@ -38,7 +38,7 @@
 
   BALL_R_MIN = 10;
 
-  BALL_R_MAX = 50;
+  BALL_R_MAX = 40;
 
   BALL_V_MAX = 5;
 
@@ -165,14 +165,36 @@
       throw "Cannot keep space";
     };
 
+
+    /*
+    moveBalls: ->
+      for ball in @balls
+        ball.vx *= 1 - FRICTION
+        ball.vy *= 1 - FRICTION
+        ball.vy += GRAVITY
+        ball.x += ball.vx
+        if ball.x < ball.r
+          ball.vx = -ball.vx * ELASTICITY
+          ball.x = 2 * ball.r - ball.x
+        else if ball.x >= WIDTH - ball.r
+          ball.vx = -ball.vx * ELASTICITY
+          ball.x = 2 * (WIDTH - ball.r) - ball.x
+        ball.y += ball.vy
+        if ball.y < ball.r
+          ball.vy = -ball.vy * ELASTICITY
+          ball.y = 2 * ball.r - ball.y
+        else if ball.y >= HEIGHT - ball.r
+          ball.vy = -ball.vy * ELASTICITY
+          ball.y = 2 * (HEIGHT - ball.r) - ball.y
+      @
+     */
+
     BallSpace.prototype.moveBalls = function() {
-      var ball, _i, _len, _ref;
+      var a, ball, vy0, y0, _i, _len, _ref;
       _ref = this.balls;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         ball = _ref[_i];
         ball.vx *= 1 - FRICTION;
-        ball.vy *= 1 - FRICTION;
-        ball.vy += GRAVITY;
         ball.x += ball.vx;
         if (ball.x < ball.r) {
           ball.vx = -ball.vx * ELASTICITY;
@@ -181,13 +203,17 @@
           ball.vx = -ball.vx * ELASTICITY;
           ball.x = 2 * (WIDTH - ball.r) - ball.x;
         }
+        vy0 = ball.vy *= 1 - FRICTION;
+        ball.vy += GRAVITY;
+        y0 = ball.y;
         ball.y += ball.vy;
-        if (ball.y < ball.r) {
+        if (ball.y >= HEIGHT - ball.r) {
+          a = (HEIGHT - ball.r - y0) / (ball.y - y0) * GRAVITY;
+          ball.vy = -(vy0 + a) * ELASTICITY;
+          ball.y = HEIGHT - ball.r;
+        } else if (ball.y < ball.r) {
           ball.vy = -ball.vy * ELASTICITY;
           ball.y = 2 * ball.r - ball.y;
-        } else if (ball.y >= HEIGHT - ball.r) {
-          ball.vy = -ball.vy * ELASTICITY;
-          ball.y = 2 * (HEIGHT - ball.r) - ball.y;
         }
       }
       return this;

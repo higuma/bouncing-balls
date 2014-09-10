@@ -24,7 +24,7 @@ HEIGHT = 480
 
 N_BALLS = 10
 BALL_R_MIN = 10
-BALL_R_MAX = 50
+BALL_R_MAX = 40
 BALL_V_MAX = 5
 
 GRAVITY = 0.5
@@ -112,6 +112,7 @@ class BallSpace
       return [x, y] if @isntOverlap x, y, r
     throw "Cannot keep space"
 
+  ###
   moveBalls: ->
     for ball in @balls
       ball.vx *= 1 - FRICTION
@@ -131,6 +132,31 @@ class BallSpace
       else if ball.y >= HEIGHT - ball.r
         ball.vy = -ball.vy * ELASTICITY
         ball.y = 2 * (HEIGHT - ball.r) - ball.y
+    @
+  ###
+
+  moveBalls: ->
+    for ball in @balls
+      ball.vx *= 1 - FRICTION
+      ball.x += ball.vx
+      if ball.x < ball.r
+        ball.vx = -ball.vx * ELASTICITY
+        ball.x = 2 * ball.r - ball.x
+      else if ball.x >= WIDTH - ball.r
+        ball.vx = -ball.vx * ELASTICITY
+        ball.x = 2 * (WIDTH - ball.r) - ball.x
+
+      vy0 = ball.vy *= 1 - FRICTION
+      ball.vy += GRAVITY
+      y0 = ball.y
+      ball.y += ball.vy
+      if ball.y >= HEIGHT - ball.r      # bound on the ground
+        a = (HEIGHT - ball.r - y0) / (ball.y - y0) * GRAVITY
+        ball.vy = -(vy0 + a) * ELASTICITY
+        ball.y = HEIGHT - ball.r
+      else if ball.y < ball.r
+        ball.vy = -ball.vy * ELASTICITY
+        ball.y = 2 * ball.r - ball.y
     @
 
   bounce: (b1, b2) ->
