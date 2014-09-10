@@ -25,10 +25,11 @@ HEIGHT = 480
 N_BALLS = 10
 BALL_R_MIN = 10
 BALL_R_MAX = 50
-BALL_V_MAX = 3
+BALL_V_MAX = 5
 
 GRAVITY = 0.5
-FRICTION = 0.02
+FRICTION = 0.01         # air resiatance
+ELASTICITY = 0.95       # elastic coefficient
 
 FRAMES_PER_SECOND = 30
 
@@ -118,24 +119,24 @@ class BallSpace
       ball.vy += GRAVITY
       ball.x += ball.vx
       if ball.x < ball.r
-        ball.vx = -ball.vx
+        ball.vx = -ball.vx * ELASTICITY
         ball.x = 2 * ball.r - ball.x
       else if ball.x >= WIDTH - ball.r
+        ball.vx = -ball.vx * ELASTICITY
         ball.x = 2 * (WIDTH - ball.r) - ball.x
-        ball.vx = -ball.vx
       ball.y += ball.vy
       if ball.y < ball.r
-        ball.vy = -ball.vy
+        ball.vy = -ball.vy * ELASTICITY
         ball.y = 2 * ball.r - ball.y
       else if ball.y >= HEIGHT - ball.r
+        ball.vy = -ball.vy * ELASTICITY
         ball.y = 2 * (HEIGHT - ball.r) - ball.y
-        ball.vy = -ball.vy
     @
 
   bounce: (b1, b2) ->
     angle = atan2 b1.y - b2.y, b1.x - b2.x
-    v1 = b1.speed()
-    v2 = b2.speed()
+    v1 = b1.speed() * ELASTICITY
+    v2 = b2.speed() * ELASTICITY
     diffA1 = atan2(b1.vy, b1.vx) - angle
     diffA2 = atan2(b2.vy, b2.vx) - angle
     vx1 = v1 * cos diffA1
