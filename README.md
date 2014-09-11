@@ -11,4 +11,4 @@ Bouncing balls demo.
 Used libraries.
 
 * [jQuery](http://jquery.com/)
-* [Bootstrap](http://getbootstrap.com/)
+* [jQuery UI](http://jqueryui.com/)

@@ -5,43 +5,39 @@ div.wrapper
       tbody
         tr
           td.buttons(colspan="3")
-            button#reset Reset
-            button#play Play
-            button#stop Stop
+            button#resetButton Reset
+            button#startButton Start
+            button#stopButton Stop
           td.label Number of balls
-          td.slider
-            div#number
-          td.value 10
+          td.slider: div#nBallsSlider
+          td.value#nBallsValue
           td.label Gravity
           td.slider
-            div#gravity
-          td.value 0.5
+            div#gravitySlider
+          td.value#gravityValue
         tr
           td.label Width
-          td.slider
-            div#width
-          td.value 640
+          td.slider: div#widthSlider
+          td.value#widthValue
           td.label Ball size
           td.slider
-            div#size
-          td.value 10 - 40
+            div#ballSizeSlider
+          td.value#ballSizeValue
           td.label Elasticity
-          td.slider
-            div#elasticity
-          td.value 0.95
+          td.slider: div#elasticitySlider
+          td.value#elasticityValue
         tr.spacer
         tr
           td.label Height
           td.slider
-            div#height
-          td.value 480
+            div#heightSlider
+          td.value#heightValue
           td.label Initial speed
           td.slider
-            div#speed
-          td.value 0 - 4
+            div#initialSpeedSlider
+          td.value#initialSpeedValue
           td.label Air resistance
-          td.slider
-            div#resistance
-          td.value 0.05
+          td.slider: div#resistanceSlider
+          td.value#resistanceValue
 
   canvas#canvas(width=640,height=480)
