@@ -8,7 +8,8 @@ uglify = require 'gulp-uglify'
 gulp.task 'default', ->
   gulp.src('src/jade/index.jade')
     #.pipe(watch())
-    .pipe(jade())
+    #.pipe(jade())
+    .pipe(jade pretty: true)
     .pipe(gulp.dest('public'))
   gulp.src('src/sass/application.sass')
     #.pipe(watch())

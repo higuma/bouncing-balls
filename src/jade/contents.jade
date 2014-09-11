@@ -1,4 +1,47 @@
-div#maincanvas
+div.wrapper
+  h1 Bouncing balls simulation
+  div
+    table.parameters
+      tbody
+        tr
+          td.buttons(colspan="3")
+            button#reset Reset
+            button#play Play
+            button#stop Stop
+          td.label Number of balls
+          td.slider
+            div#number
+          td.value 10
+          td.label Gravity
+          td.slider
+            div#gravity
+          td.value 0.5
+        tr
+          td.label Width
+          td.slider
+            div#width
+          td.value 640
+          td.label Ball size
+          td.slider
+            div#size
+          td.value 10 - 40
+          td.label Elasticity
+          td.slider
+            div#elasticity
+          td.value 0.95
+        tr.spacer
+        tr
+          td.label Height
+          td.slider
+            div#height
+          td.value 480
+          td.label Initial speed
+          td.slider
+            div#speed
+          td.value 0 - 4
+          td.label Air resistance
+          td.slider
+            div#resistance
+          td.value 0.05
+
   canvas#canvas(width=640,height=480)
-div#controllers
-  span TODO: controllers

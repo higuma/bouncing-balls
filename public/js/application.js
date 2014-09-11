@@ -1,5 +1,5 @@
 (function() {
-  var BALL_R_MAX, BALL_R_MIN, BALL_V_MAX, Ball, BallSpace, ELASTICITY, FRAMES_PER_SECOND, FRICTION, GRAVITY, HEIGHT, N_BALLS, TWOPI, WIDTH, atan2, balls, brightness, canvas, cos, darken, dc, getRand, i, intervalFunc, random, sin, sqrt, _i;
+  var BALL_R_MAX, BALL_R_MIN, BALL_V_MAX, Ball, BallSpace, ELASTICITY, FRAMES_PER_SECOND, FRICTION, GRAVITY, HEIGHT, N_BALLS, TWOPI, WIDTH, atan2, balls, brightness, canvas, cos, darken, dc, getRand, i, id, intervalFunc, random, sin, sqrt, _i, _j, _len, _ref;
 
   random = Math.random;
 
@@ -44,9 +44,9 @@
 
   GRAVITY = 0.5;
 
-  FRICTION = 0.01;
-
   ELASTICITY = 0.95;
+
+  FRICTION = 0.01;
 
   FRAMES_PER_SECOND = 30;
 
@@ -165,30 +165,6 @@
       throw "Cannot keep space";
     };
 
-
-    /*
-    moveBalls: ->
-      for ball in @balls
-        ball.vx *= 1 - FRICTION
-        ball.vy *= 1 - FRICTION
-        ball.vy += GRAVITY
-        ball.x += ball.vx
-        if ball.x < ball.r
-          ball.vx = -ball.vx * ELASTICITY
-          ball.x = 2 * ball.r - ball.x
-        else if ball.x >= WIDTH - ball.r
-          ball.vx = -ball.vx * ELASTICITY
-          ball.x = 2 * (WIDTH - ball.r) - ball.x
-        ball.y += ball.vy
-        if ball.y < ball.r
-          ball.vy = -ball.vy * ELASTICITY
-          ball.y = 2 * ball.r - ball.y
-        else if ball.y >= HEIGHT - ball.r
-          ball.vy = -ball.vy * ELASTICITY
-          ball.y = 2 * (HEIGHT - ball.r) - ball.y
-      @
-     */
-
     BallSpace.prototype.moveBalls = function() {
       var a, ball, vy0, y0, _i, _len, _ref;
       _ref = this.balls;
@@ -279,6 +255,33 @@
     balls.bounceAll();
     balls.draw(dc);
   };
+
+  $('#reset').button({
+    text: true,
+    icons: {
+      primary: 'ui-icon-seek-start'
+    }
+  });
+
+  $('#play').button({
+    text: true,
+    icons: {
+      primary: 'ui-icon-play'
+    }
+  });
+
+  $('#stop').button({
+    text: true,
+    icons: {
+      primary: 'ui-icon-stop'
+    }
+  });
+
+  _ref = ['width', 'height', 'number', 'size', 'speed', 'gravity', 'elasticity', 'resistance'];
+  for (_j = 0, _len = _ref.length; _j < _len; _j++) {
+    id = _ref[_j];
+    $("#" + id).slider();
+  }
 
   window.setInterval(intervalFunc, 1000 / FRAMES_PER_SECOND);
 

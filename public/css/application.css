@@ -5,6 +5,62 @@ html {
   background-color: white;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  color: #777777;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+h1 {
+  margin: 10px 0px;
+}
+
+.wrapper {
+  margin: 10px;
+  padding: 0px;
+}
+
+table.parameters {
+  margin: 0px;
+  padding: 4px;
+  border: 1px solid #aaaaaa;
+  border-radius: 5px;
+  font-size: 12px;
+  background-color: #fcfcfc;
+}
+
+td {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+td.label {
+  width: 100px;
+  text-align: right;
+  padding-right: 10px;
+}
+
+td.slider {
+  width: 80px;
+}
+
+td.value {
+  width: 50px;
+  padding-left: 10px;
+  color: #555555;
+  font-weight: bold;
+}
+
+td.buttons {
+  height: 10px;
+  font-size: 10px;
+}
+
+tr.spacer {
+  height: 4px;
+}
+
 canvas {
-  border: 1px solid;
+  margin-top: 10px;
+  border: 1px solid #aaaaaa;
 }

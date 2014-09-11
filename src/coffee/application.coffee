@@ -28,8 +28,8 @@ BALL_R_MAX = 40
 BALL_V_MAX = 5
 
 GRAVITY = 0.5
-FRICTION = 0.01         # air resiatance
 ELASTICITY = 0.95       # elastic coefficient
+FRICTION = 0.01         # air resiatance
 
 FRAMES_PER_SECOND = 30
 
@@ -112,29 +112,6 @@ class BallSpace
       return [x, y] if @isntOverlap x, y, r
     throw "Cannot keep space"
 
-  ###
-  moveBalls: ->
-    for ball in @balls
-      ball.vx *= 1 - FRICTION
-      ball.vy *= 1 - FRICTION
-      ball.vy += GRAVITY
-      ball.x += ball.vx
-      if ball.x < ball.r
-        ball.vx = -ball.vx * ELASTICITY
-        ball.x = 2 * ball.r - ball.x
-      else if ball.x >= WIDTH - ball.r
-        ball.vx = -ball.vx * ELASTICITY
-        ball.x = 2 * (WIDTH - ball.r) - ball.x
-      ball.y += ball.vy
-      if ball.y < ball.r
-        ball.vy = -ball.vy * ELASTICITY
-        ball.y = 2 * ball.r - ball.y
-      else if ball.y >= HEIGHT - ball.r
-        ball.vy = -ball.vy * ELASTICITY
-        ball.y = 2 * (HEIGHT - ball.r) - ball.y
-    @
-  ###
-
   moveBalls: ->
     for ball in @balls
       ball.vx *= 1 - FRICTION
@@ -205,4 +182,12 @@ intervalFunc = ->
   balls.draw dc
   return
 
+# setup jQuery UI widgets
+$('#reset').button text: true, icons: {primary: 'ui-icon-seek-start'}
+$('#play').button text: true, icons: {primary: 'ui-icon-play'}
+$('#stop').button text: true, icons: {primary: 'ui-icon-stop'}
+for id in ['width', 'height', 'number', 'size', 'speed', 'gravity', 'elasticity', 'resistance']
+  $("##{id}").slider()
+
+# start animation
 window.setInterval intervalFunc, 1000 / FRAMES_PER_SECOND

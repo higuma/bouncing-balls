@@ -1,1 +1,77 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Bouncing balls</title><link rel="stylesheet" href="css/application.css"><!--[if lt IE 9]><script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script><script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script><![endif]--></head><body><div id="maincanvas"><canvas id="canvas" width="640" height="480"></canvas></div><div id="controllers"><span>TODO: controllers</span></div><script src="js/application.js"></script></body></html>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Bouncing balls simulation</title>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="css/application.css">
+  </head>
+  <body>
+    <div class="wrapper">
+      <h1>Bouncing balls simulation</h1>
+      <div>
+        <table class="parameters">
+          <tbody>
+            <tr>
+              <td colspan="3" class="buttons">
+                <button id="reset">Reset</button>
+                <button id="play">Play</button>
+                <button id="stop">Stop</button>
+              </td>
+              <td class="label">Number of balls</td>
+              <td class="slider">
+                <div id="number"></div>
+              </td>
+              <td class="value">10</td>
+              <td class="label">Gravity</td>
+              <td class="slider">
+                <div id="gravity"></div>
+              </td>
+              <td class="value">0.5</td>
+            </tr>
+            <tr>
+              <td class="label">Width</td>
+              <td class="slider">
+                <div id="width"></div>
+              </td>
+              <td class="value">640</td>
+              <td class="label">Ball size</td>
+              <td class="slider">
+                <div id="size"></div>
+              </td>
+              <td class="value">10 - 40</td>
+              <td class="label">Elasticity</td>
+              <td class="slider">
+                <div id="elasticity"></div>
+              </td>
+              <td class="value">0.95</td>
+            </tr>
+            <tr class="spacer"></tr>
+            <tr>
+              <td class="label">Height</td>
+              <td class="slider">
+                <div id="height"></div>
+              </td>
+              <td class="value">480</td>
+              <td class="label">Initial speed</td>
+              <td class="slider">
+                <div id="speed"></div>
+              </td>
+              <td class="value">0 - 4</td>
+              <td class="label">Air resistance</td>
+              <td class="slider">
+                <div id="resistance"></div>
+              </td>
+              <td class="value">0.05</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <canvas id="canvas" width="640" height="480"></canvas>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+    <script src="js/application.js"></script>
+  </body>
+</html>
