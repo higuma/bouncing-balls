@@ -4,7 +4,7 @@ English | [Japanese](/README.ja.md)
 
 Bouncing balls simulation (HTML5 canvas demo).
 
-* <http://bouncing-balls.herokuapp.com/>
+* <http://bouncing-balls-canvas.herokuapp.com/>
 
 ![Screen shot](screenshot.png)
 
