@@ -1,10 +1,10 @@
-# Bouncing balls (HTML5 canvas demo)
+# Bouncing balls simulation (HTML5 canvas demo)
 
 English | [Japanese](/README.ja.md)
 
-Bouncing balls demo.
+Bouncing balls simulation (HTML5 canvas demo).
 
-* <http://bouncing-balls-2d.herokuapp.com/>
+* <http://bouncing-balls.herokuapp.com/>
 
 ![Screen shot](screenshot.png)
 

@@ -49,6 +49,7 @@ td.value {
   width: 60px;
   padding-left: 10px;
   color: #333333;
+  font-weight: bold;
 }
 
 td.buttons {
@@ -63,4 +64,9 @@ tr.spacer {
 canvas {
   margin-top: 10px;
   border: 1px solid #aaaaaa;
+}
+
+a#about {
+  font-size: 12px;
+  text-decoration: none;
 }

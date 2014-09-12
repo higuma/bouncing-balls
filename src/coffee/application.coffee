@@ -71,7 +71,7 @@ RESISTANCE = 0
 RESISTANCE_MIN = 0
 RESISTANCE_MAX = 40
 RESISTANCE_STEP = 1
-RESISTANCE_SCALE = 0.01
+RESISTANCE_SCALE = 0.001
 RESISTANCE_SCALED = RESISTANCE_SCALE * RESISTANCE
 
 FRAMES_PER_SECOND = 30
@@ -79,7 +79,10 @@ FRAMES_PER_SECOND = 30
 class Ball
   constructor: (@owner) ->
     @r = getRand(BALL_SIZE_MIN, BALL_SIZE_MAX) / 2
-    [@x, @y] = @owner.getSpace @r
+    try
+      [@x, @y] = @owner.getSpace @r
+    catch
+      window.alert "Cannot alocate enough space to fill balls"
     vel = getRand INITIAL_SPEED_MIN_SCALED, INITIAL_SPEED_MAX_SCALED
     angle = getRand 0, TWOPI
     @vx = vel * cos(angle)
@@ -169,13 +172,21 @@ class BallSpace
         ball.x = 2 * (WIDTH - ball.r) - ball.x
 
       vy0 = ball.vy *= 1 - RESISTANCE_SCALED
-      ball.vy += GRAVITY_SCALED
+      if ball.y < HEIGHT - ball.r   # do not add gravity if already grounded
+        ball.vy += GRAVITY_SCALED
       y0 = ball.y
       ball.y += ball.vy
-      if ball.y >= HEIGHT - ball.r      # bound on the ground
+      if ball.y >= HEIGHT - ball.r  # bound on the ground
+        # if gravity exists, balls vibrate on the ground even if elasticity < 1
+        ball.vy = -ball.vy * ELASTICITY_SCALED
+        ball.y = 2 * (HEIGHT - ball.r) - ball.y
+        ###
+        # if you do not like it, use this code.
+        # (but balls get small decay even if elasticity is 1)
         a = (HEIGHT - ball.r - y0) / (ball.y - y0) * GRAVITY_SCALED
         ball.vy = -(vy0 + a) * ELASTICITY_SCALED
         ball.y = HEIGHT - ball.r
+        ###
       else if ball.y < ball.r
         ball.vy = -ball.vy * ELASTICITY_SCALED
         ball.y = 2 * ball.r - ball.y
@@ -215,6 +226,7 @@ class BallSpace
           @bounce b1, b2
     @
 
+
 # simulator
 balls = null
 
@@ -233,13 +245,17 @@ canvas = document.getElementById 'canvas'
 dc = canvas.getContext '2d'
 resize()
 
-intervalFunc = ->
-  balls.moveBalls()
-  balls.bounceAll()
-  balls.draw dc
-  return
-
 intervalId = null
+
+intervalFunc = ->
+  try
+    balls.moveBalls()
+    balls.bounceAll()
+    balls.draw dc
+  catch
+    stopSimulation()
+    window.alert "Simulation stopped"
+  return
 
 startSimulation = ->
   unless intervalId?
@@ -300,7 +316,7 @@ setElasticity = (e) ->
 setResistance = (r) ->
   RESISTANCE = r
   RESISTANCE_SCALED = RESISTANCE * RESISTANCE_SCALE
-  $('#resistanceValue').html RESISTANCE_SCALED.toFixed(2)
+  $('#resistanceValue').html RESISTANCE_SCALED.toFixed(3)
   return
 
 # setup jQuery UI widgets
@@ -362,7 +378,7 @@ $('#elasticitySlider').slider
   step: ELASTICITY_STEP
   slide: (event, ui) -> setElasticity ui.value
 
-$('#resistanceValue').html RESISTANCE_SCALED.toFixed(2)
+$('#resistanceValue').html RESISTANCE_SCALED.toFixed(3)
 $('#resistanceSlider').slider
   min: RESISTANCE_MIN
   max: RESISTANCE_MAX

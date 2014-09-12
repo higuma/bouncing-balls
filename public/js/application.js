@@ -116,7 +116,7 @@
 
   RESISTANCE_STEP = 1;
 
-  RESISTANCE_SCALE = 0.01;
+  RESISTANCE_SCALE = 0.001;
 
   RESISTANCE_SCALED = RESISTANCE_SCALE * RESISTANCE;
 
@@ -127,7 +127,11 @@
       var angle, vel, _ref;
       this.owner = owner;
       this.r = getRand(BALL_SIZE_MIN, BALL_SIZE_MAX) / 2;
-      _ref = this.owner.getSpace(this.r), this.x = _ref[0], this.y = _ref[1];
+      try {
+        _ref = this.owner.getSpace(this.r), this.x = _ref[0], this.y = _ref[1];
+      } catch (_error) {
+        window.alert("Cannot alocate enough space to fill balls");
+      }
       vel = getRand(INITIAL_SPEED_MIN_SCALED, INITIAL_SPEED_MAX_SCALED);
       angle = getRand(0, TWOPI);
       this.vx = vel * cos(angle);
@@ -240,7 +244,7 @@
     };
 
     BallSpace.prototype.moveBalls = function() {
-      var a, ball, vy0, y0, _i, _len, _ref;
+      var ball, vy0, y0, _i, _len, _ref;
       _ref = this.balls;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         ball = _ref[_i];
@@ -254,13 +258,22 @@
           ball.x = 2 * (WIDTH - ball.r) - ball.x;
         }
         vy0 = ball.vy *= 1 - RESISTANCE_SCALED;
-        ball.vy += GRAVITY_SCALED;
+        if (ball.y < HEIGHT - ball.r) {
+          ball.vy += GRAVITY_SCALED;
+        }
         y0 = ball.y;
         ball.y += ball.vy;
         if (ball.y >= HEIGHT - ball.r) {
-          a = (HEIGHT - ball.r - y0) / (ball.y - y0) * GRAVITY_SCALED;
-          ball.vy = -(vy0 + a) * ELASTICITY_SCALED;
-          ball.y = HEIGHT - ball.r;
+          ball.vy = -ball.vy * ELASTICITY_SCALED;
+          ball.y = 2 * (HEIGHT - ball.r) - ball.y;
+
+          /*
+           * if you do not like it, use this code.
+           * (but balls get small decay even if elasticity is 1)
+          a = (HEIGHT - ball.r - y0) / (ball.y - y0) * GRAVITY_SCALED
+          ball.vy = -(vy0 + a) * ELASTICITY_SCALED
+          ball.y = HEIGHT - ball.r
+           */
         } else if (ball.y < ball.r) {
           ball.vy = -ball.vy * ELASTICITY_SCALED;
           ball.y = 2 * ball.r - ball.y;
@@ -339,13 +352,18 @@
 
   resize();
 
-  intervalFunc = function() {
-    balls.moveBalls();
-    balls.bounceAll();
-    balls.draw(dc);
-  };
-
   intervalId = null;
+
+  intervalFunc = function() {
+    try {
+      balls.moveBalls();
+      balls.bounceAll();
+      balls.draw(dc);
+    } catch (_error) {
+      stopSimulation();
+      window.alert("Simulation stopped");
+    }
+  };
 
   startSimulation = function() {
     if (intervalId == null) {
@@ -414,7 +432,7 @@
   setResistance = function(r) {
     RESISTANCE = r;
     RESISTANCE_SCALED = RESISTANCE * RESISTANCE_SCALE;
-    $('#resistanceValue').html(RESISTANCE_SCALED.toFixed(2));
+    $('#resistanceValue').html(RESISTANCE_SCALED.toFixed(3));
   };
 
   $('#widthValue').html(WIDTH);
@@ -503,7 +521,7 @@
     }
   });
 
-  $('#resistanceValue').html(RESISTANCE_SCALED.toFixed(2));
+  $('#resistanceValue').html(RESISTANCE_SCALED.toFixed(3));
 
   $('#resistanceSlider').slider({
     min: RESISTANCE_MIN,
@@ -539,7 +557,6 @@
       primary: 'ui-icon-stop'
     }
   }).click(function() {
-    console.log("STOP");
     return stopSimulation();
   });
 
