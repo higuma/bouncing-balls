@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Bouncing balls simulation</title>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="css/application.css">
+  </head>
+  <body>
+    <div class="wrapper">
+      <h1>Bouncing balls simulation</h1>
+      <div>
+        <table class="parameters">
+          <tbody>
+            <tr>
+              <td colspan="3" class="buttons">
+                <button id="resetButton">Reset</button>
+                <button id="startButton">Start</button>
+                <button id="stopButton">Stop</button>
+              </td>
+              <td class="label">Number of balls</td>
+              <td class="slider">
+                <div id="nBallsSlider"></div>
+              </td>
+              <td id="nBallsValue" class="value"></td>
+              <td class="label">Gravity</td>
+              <td class="slider">
+                <div id="gravitySlider"></div>
+              </td>
+              <td id="gravityValue" class="value"></td>
+            </tr>
+            <tr>
+              <td class="label">Width</td>
+              <td class="slider">
+                <div id="widthSlider"></div>
+              </td>
+              <td id="widthValue" class="value"></td>
+              <td class="label">Ball size</td>
+              <td class="slider">
+                <div id="ballSizeSlider"></div>
+              </td>
+              <td id="ballSizeValue" class="value"></td>
+              <td class="label">Elasticity</td>
+              <td class="slider">
+                <div id="elasticitySlider"></div>
+              </td>
+              <td id="elasticityValue" class="value"></td>
+            </tr>
+            <tr class="spacer"></tr>
+            <tr>
+              <td class="label">Height</td>
+              <td class="slider">
+                <div id="heightSlider"></div>
+              </td>
+              <td id="heightValue" class="value"></td>
+              <td class="label">Initial speed</td>
+              <td class="slider">
+                <div id="initialSpeedSlider"></div>
+              </td>
+              <td id="initialSpeedValue" class="value"></td>
+              <td class="label">Air resistance</td>
+              <td class="slider">
+                <div id="resistanceSlider"></div>
+              </td>
+              <td id="resistanceValue" class="value"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <canvas id="canvas" width="800" height="400">Your browser does not support HTML5 canvas</canvas>
+      <div><a id="about" href="https://github.com/higuma/bouncing-balls">About this application</a></div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+    <script src="js/application.js"></script>
+  </body>
+</html>
