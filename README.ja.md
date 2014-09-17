@@ -4,7 +4,7 @@
 
 2次元平面上のボール運動シミュレーションです。
 
-* <http://bouncing-balls-canvas.herokuapp.com/>
+* <http://higuma.github.io/bouncing-balls/>
 
 ![Screen shot](screenshot.png)
 
