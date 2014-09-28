@@ -239,4 +239,8 @@
 
 > 簡易タグではGitHubのbranch表示で表示してくれないらしい。現在作業中(これがうまく行けばそれでOKとする)。
 
-
+> > 後で分かったが、これはGitHub側でReleaseを設定しないとだめ。方法は次を参照。
+> > 
+> > <https://help.github.com/articles/creating-releases>
+> > 
+> > 作業途中段階にバージョン番号を付けても意味はないので、今回はこの最終段階をv0.1.0としてこれにだけrelease用のtagを付けて終了とする。

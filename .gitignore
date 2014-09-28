@@ -1,4 +1,3 @@
-node_modules
-bouncing-balls
+node_modules/
 .sass-cache
 *.swp
