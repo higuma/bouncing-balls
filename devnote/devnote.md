@@ -231,3 +231,6 @@
 
 後で追加: deploy先をherokuからgithub.ioに変更した。
 
+作り方は次の通り。gh-pagesというbranchを作り、そこに全ファイルを置けばよい。
+
+<https://help.github.com/articles/creating-project-pages-manually>
