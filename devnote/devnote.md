@@ -234,3 +234,9 @@
 作り方は次の通り。gh-pagesというbranchを作り、そこに全ファイルを置けばよい。
 
 <https://help.github.com/articles/creating-project-pages-manually>
+
+ついでにtagも付けた。
+
+> 簡易タグではGitHubのbranch表示で表示してくれないらしい。現在作業中(これがうまく行けばそれでOKとする)。
+
+
